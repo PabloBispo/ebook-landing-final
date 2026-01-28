@@ -56,13 +56,13 @@ export function ValueProposition() {
         </div>
 
         {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {values.map((value, index) => {
             const Icon = value.icon
             return (
               <div
                 key={value.title}
-                className="group glass-card hover-lift hover-glow cursor-pointer"
+                className="group glass-card hover-lift cursor-pointer"
                 style={{
                   animationDelay: `${index * 100}ms`,
                 }}
@@ -70,7 +70,7 @@ export function ValueProposition() {
                 {/* Icon */}
                 <div className="mb-4">
                   <div
-                    className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${value.color} group-hover:scale-110 transition-transform duration-300`}
+                    className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${value.color} [@media(hover:hover)]:group-hover:scale-110 transition-transform duration-300`}
                   >
                     <Icon className="h-6 w-6 text-white" />
                   </div>

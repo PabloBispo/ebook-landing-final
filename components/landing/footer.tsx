@@ -24,17 +24,17 @@ export function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="group flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
+            <Link href="/" className="group flex items-center gap-2 sm:gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center [@media(hover:hover)]:group-hover:scale-110 transition-transform">
                 <span className="text-white font-bold text-sm">b.ia</span>
               </div>
-              <div>
-                <span className="font-bold text-lg">@bispo.ia</span>
-                <div className="relative overflow-hidden h-4 min-w-[200px]">
-                  <p className="text-xs text-muted-foreground transition-all duration-300 group-hover:-translate-y-4 group-hover:opacity-0">
+              <div className="flex flex-col">
+                <span className="font-bold text-base sm:text-lg">@bispo.ia</span>
+                <div className="relative overflow-hidden h-4">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground transition-all duration-300 [@media(hover:hover)]:group-hover:-translate-y-4 [@media(hover:hover)]:group-hover:opacity-0 whitespace-nowrap">
                     Desenhando novas realidades com IA
                   </p>
-                  <p className="text-xs text-muted-foreground transition-all duration-300 absolute top-0 left-0 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground transition-all duration-300 absolute top-0 left-0 translate-y-4 opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100 whitespace-nowrap">
                     AI Engineer & Creator
                   </p>
                 </div>

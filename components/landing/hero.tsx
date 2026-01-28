@@ -111,7 +111,33 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right column - Visual element */}
+          {/* Mobile visual highlights */}
+          <div className="lg:hidden mt-8 flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+            <div className="glass-card p-4 rounded-xl min-w-[200px] snap-start">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Anti-Robô</p>
+                  <p className="text-sm font-bold">Voz autoral</p>
+                </div>
+              </div>
+            </div>
+            <div className="glass-card p-4 rounded-xl min-w-[200px] snap-start">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Resultados</p>
+                  <p className="text-sm font-bold">Documentados</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right column - Visual element (Desktop) */}
           <div className="relative animate-scale-in hidden lg:block">
             <div className="relative aspect-square max-w-lg mx-auto">
               {/* Glow effect */}

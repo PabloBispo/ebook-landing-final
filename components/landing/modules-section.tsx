@@ -159,29 +159,33 @@ export function ModulesSection() {
         </div>
 
         {/* Journey visualization */}
-        <div className="mb-12 overflow-x-auto">
-          <div className="flex items-center justify-center gap-2 min-w-max px-4">
+        <div className="mb-12 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+          <div className="flex items-center justify-start lg:justify-center gap-2 min-w-max px-4 pb-2">
             {phases.map((phase, index) => (
-              <div key={phase.id} className="flex items-center">
+              <div key={phase.id} className="flex items-center snap-start">
                 <button
                   onClick={() => setActivePhase(activePhase === phase.id ? null : phase.id)}
                   className={cn(
-                    'flex flex-col items-center p-4 rounded-xl transition-all duration-300',
+                    'flex flex-col items-center p-3 sm:p-4 rounded-xl transition-all duration-300 min-w-[100px] sm:min-w-[120px]',
                     activePhase === phase.id
                       ? 'bg-primary text-primary-foreground scale-105'
-                      : 'bg-secondary/50 hover:bg-secondary'
+                      : 'bg-secondary/50 [@media(hover:hover)]:hover:bg-secondary'
                   )}
                 >
-                  <span className="text-xs font-medium opacity-80">[{phase.chapters}]</span>
-                  <span className="font-bold">{phase.label}</span>
-                  <span className="text-sm opacity-80">{phase.question}</span>
+                  <span className="text-[10px] sm:text-xs font-medium opacity-80">[{phase.chapters}]</span>
+                  <span className="font-bold text-sm sm:text-base">{phase.label}</span>
+                  <span className="text-xs sm:text-sm opacity-80">{phase.question}</span>
                 </button>
                 {index < phases.length - 1 && (
-                  <div className="w-8 h-0.5 bg-border mx-1" />
+                  <div className="w-4 sm:w-8 h-0.5 bg-border mx-1" />
                 )}
               </div>
             ))}
           </div>
+          {/* Mobile scroll hint */}
+          <p className="lg:hidden text-center text-xs text-muted-foreground mt-2">
+            ← Deslize para ver todas as fases →
+          </p>
           {activePhase && (
             <p className="text-center text-sm text-muted-foreground mt-4">
               Mostrando capítulos da fase "{phases.find(p => p.id === activePhase)?.label}".{' '}

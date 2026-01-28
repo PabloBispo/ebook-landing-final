@@ -99,7 +99,7 @@ export function CTASection() {
             {/* CTA Button */}
             <a
               href="#comprar"
-              className="block w-full text-center px-8 py-5 rounded-xl bg-gradient-primary text-white font-bold text-lg hover-lift glow-primary transition-all duration-300 mb-6"
+              className="block w-full text-center px-6 sm:px-8 py-4 sm:py-5 min-h-[56px] flex items-center justify-center rounded-xl bg-gradient-primary text-white font-bold text-base sm:text-lg hover-lift glow-primary transition-all duration-300 mb-6"
             >
               Quero Tirar do Papel Agora
             </a>

@@ -99,7 +99,7 @@ export function ProfilesSection() {
         </div>
 
         {/* Profiles Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-16">
           {profiles.map((profile, index) => {
             const Icon = profile.icon
             const isSelected = selectedProfile === profile.id
