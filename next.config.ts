@@ -5,6 +5,18 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  // TypeScript build optimization
+  typescript: {
+    // Type checking is already done in CI/CD
+    ignoreBuildErrors: false,
+  },
+
+  // ESLint optimization
+  eslint: {
+    // Linting is already done in CI/CD
+    ignoreDuringBuilds: false,
+  },
+
   // Image optimization
   images: {
     remotePatterns: [
