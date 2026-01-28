@@ -24,13 +24,20 @@ export function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+            <Link href="/" className="group flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
                 <span className="text-white font-bold text-sm">b.ia</span>
               </div>
               <div>
                 <span className="font-bold text-lg">@bispo.ia</span>
-                <p className="text-xs text-muted-foreground">O Engenheiro que Traduz</p>
+                <div className="relative overflow-hidden h-4">
+                  <p className="text-xs text-muted-foreground transition-all duration-300 absolute whitespace-nowrap group-hover:-translate-y-4 group-hover:opacity-0">
+                    Desenhando novas realidades com IA
+                  </p>
+                  <p className="text-xs text-muted-foreground transition-all duration-300 absolute whitespace-nowrap translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                    AI Engineer & Creator
+                  </p>
+                </div>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground max-w-md mb-4 italic">

@@ -47,7 +47,14 @@ export function Header() {
             </div>
             <div className="hidden sm:block">
               <span className="font-bold text-lg">@bispo.ia</span>
-              <p className="text-xs text-muted-foreground">O Engenheiro que Traduz</p>
+              <div className="relative overflow-hidden h-4">
+                <p className="text-xs text-muted-foreground transition-all duration-300 absolute group-hover:-translate-y-4 group-hover:opacity-0">
+                  Desenhando novas realidades com IA
+                </p>
+                <p className="text-xs text-muted-foreground transition-all duration-300 absolute translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                  AI Engineer & Creator
+                </p>
+              </div>
             </div>
           </Link>
 
