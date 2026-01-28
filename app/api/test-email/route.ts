@@ -14,7 +14,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: 'Email enviado com sucesso!',
-      emailId: data.id,
+      emailId: data.data?.id,
       data,
     })
   } catch (error) {

@@ -1,19 +1,20 @@
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
 
-if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
-  throw new Error('MERCADO_PAGO_ACCESS_TOKEN is not defined in environment variables')
-}
+// Initialize only if token is available (runtime check)
+const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN || ''
 
-// Initialize Mercado Pago client
-export const mercadoPagoClient = new MercadoPagoConfig({
-  accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN,
-  options: {
-    timeout: 5000,
-  }
-})
+// Create client with placeholder during build, will be properly initialized at runtime
+export const mercadoPagoClient = accessToken
+  ? new MercadoPagoConfig({
+      accessToken,
+      options: {
+        timeout: 5000,
+      }
+    })
+  : null as any as MercadoPagoConfig
 
-export const preferenceClient = new Preference(mercadoPagoClient)
-export const paymentClient = new Payment(mercadoPagoClient)
+export const preferenceClient = accessToken ? new Preference(mercadoPagoClient) : null as any as Preference
+export const paymentClient = accessToken ? new Payment(mercadoPagoClient) : null as any as Payment
 
 // Product definitions
 export const PRODUCTS = {

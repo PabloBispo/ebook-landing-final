@@ -1,10 +1,8 @@
 import { Resend } from 'resend'
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('RESEND_API_KEY is not defined in environment variables')
-}
-
-export const resend = new Resend(process.env.RESEND_API_KEY)
+// Initialize with placeholder during build, will be properly initialized at runtime
+const apiKey = process.env.RESEND_API_KEY || 'placeholder'
+export const resend = new Resend(apiKey)
 
 // Email sender configuration
 export const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev'

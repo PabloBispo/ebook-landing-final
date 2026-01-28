@@ -119,11 +119,15 @@
   }
 
   .hover-lift {
-    @apply transition-transform duration-200 hover:-translate-y-1;
+    transition: transform 200ms ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
   }
 
   .hover-glow {
-    @apply transition-shadow duration-300;
+    transition: box-shadow 300ms ease;
   }
 
   .hover-glow:hover {
@@ -131,16 +135,33 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
     background-image: linear-gradient(135deg, hsl(195 94% 43%), hsl(189 80% 60%));
   }
 
   .glass {
-    @apply backdrop-blur-sm bg-white/80 dark:bg-black/80;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgb(255 255 255 / 0.8);
+  }
+
+  .dark .glass {
+    background-color: rgb(0 0 0 / 0.8);
   }
 
   .glass-card {
-    @apply glass border border-border rounded-xl p-6;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgb(255 255 255 / 0.8);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .dark .glass-card {
+    background-color: rgb(0 0 0 / 0.8);
   }
 
   .animate-fade-in-up {

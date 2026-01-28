@@ -9,6 +9,15 @@ import { z } from 'zod'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Mercado Pago is configured
+    if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
+      console.error('MERCADO_PAGO_ACCESS_TOKEN not configured')
+      return NextResponse.json(
+        { error: 'Sistema de pagamento não configurado' },
+        { status: 500 }
+      )
+    }
+
     // Rate limiting
     const ip = request.headers.get('x-forwarded-for') || 'unknown'
     try {
@@ -160,7 +169,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Handle validation errors
     if (error instanceof z.ZodError) {
-      console.error('Invalid webhook data:', error.errors)
+      console.error('Invalid webhook data:', error.issues)
       return NextResponse.json(
         { error: 'Invalid webhook data' },
         { status: 400 }

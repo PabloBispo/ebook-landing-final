@@ -9,6 +9,15 @@ import { z } from 'zod'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Mercado Pago is configured
+    if (!process.env.MERCADO_PAGO_ACCESS_TOKEN) {
+      console.error('MERCADO_PAGO_ACCESS_TOKEN not configured')
+      return NextResponse.json(
+        { error: 'Sistema de pagamento não configurado' },
+        { status: 500 }
+      )
+    }
+
     // Get client info
     const ip = getClientIp(request) || 'unknown'
 
@@ -137,7 +146,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Dados inválidos',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       )
