@@ -112,6 +112,25 @@ export function Hero() {
 
               {/* Central card */}
               <div className="relative h-full glass-card flex flex-col items-center justify-center text-center p-8">
+                {/* Visual Placeholder */}
+                <div className="w-full max-w-sm mb-8 relative">
+                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 flex items-center justify-center relative overflow-hidden">
+                    {/* Animated circles */}
+                    <div className="absolute inset-0">
+                      <div className="absolute top-1/4 left-1/4 w-24 h-24 rounded-full bg-primary/20 blur-2xl animate-pulse" />
+                      <div className="absolute bottom-1/4 right-1/4 w-32 h-32 rounded-full bg-accent/20 blur-2xl animate-pulse delay-75" />
+                    </div>
+
+                    {/* Icon placeholder */}
+                    <div className="relative z-10 text-center">
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-primary flex items-center justify-center">
+                        <span className="text-3xl font-bold text-white">b.ia</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Instrumento, não fim</p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Quote */}
                 <div className="mb-8">
                   <p className="text-4xl font-bold mb-4">"</p>
