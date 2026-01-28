@@ -7,6 +7,10 @@ import { getClientIp, sanitizeEmail } from '@/lib/utils'
 import { checkoutRateLimit } from '@/lib/rate-limit'
 import { z } from 'zod'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Check if Mercado Pago is configured

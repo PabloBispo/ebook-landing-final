@@ -11,12 +11,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint optimization
-  eslint: {
-    // Linting is already done in CI/CD
-    ignoreDuringBuilds: false,
-  },
-
   // Image optimization
   images: {
     remotePatterns: [

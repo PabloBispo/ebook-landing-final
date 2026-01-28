@@ -7,6 +7,10 @@ import { webhookRateLimit } from '@/lib/rate-limit'
 import { resend, EMAIL_FROM, SUPPORT_EMAIL, emailTemplates } from '@/lib/resend'
 import { z } from 'zod'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Check if Mercado Pago is configured

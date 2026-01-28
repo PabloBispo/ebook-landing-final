@@ -7,6 +7,10 @@ import { leadRateLimit } from '@/lib/rate-limit'
 import { resend, EMAIL_FROM, emailTemplates } from '@/lib/resend'
 import { z } from 'zod'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Get client info
