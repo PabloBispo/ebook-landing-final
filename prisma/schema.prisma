@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Model for lead capture (email list)
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  source    String?  // Where the lead came from (landing page, etc)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+// Model for users who purchased
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  name          String
+  phone         String?
+  emailVerified DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  purchases     Purchase[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// Model for purchases
+model Purchase {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId       String   // "ebook-masterclass" or future products
+  productName     String
+  amount          Float    // Amount in BRL
+  currency        String   @default("BRL")
+  status          String   // "pending", "approved", "rejected", "refunded"
+  paymentMethod   String?  // "credit_card", "pix", "boleto"
+  installments    Int      @default(1)
+  mercadoPagoId   String?  @unique // Mercado Pago payment ID
+  mercadoPagoData Json?    // Full Mercado Pago response
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([mercadoPagoId])
+  @@map("purchases")
+}
+
+// Model for tracking payment webhooks from Mercado Pago
+model WebhookEvent {
+  id            String   @id @default(cuid())
+  event         String   // "payment.created", "payment.updated", etc
+  paymentId     String?
+  merchantOrder String?
+  rawData       Json     // Full webhook payload
+  processed     Boolean  @default(false)
+  processedAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([paymentId])
+  @@index([processed])
+  @@index([createdAt])
+  @@map("webhook_events")
+}
+
+// Model for analytics and tracking
+model PageView {
+  id         String   @id @default(cuid())
+  path       String
+  referrer   String?
+  ipAddress  String?
+  userAgent  String?
+  utmSource  String?
+  utmMedium  String?
+  utmCampaign String?
+  createdAt  DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+  @@index([utmSource])
+  @@map("page_views")
+}

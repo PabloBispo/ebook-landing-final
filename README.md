@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ebook Landing Page - Versão Final 🚀
 
-## Getting Started
+Landing page moderna e segura para venda de masterclass de criação de ebooks com IA, construída com Next.js 16, Prisma, e Mercado Pago.
 
-First, run the development server:
+## 🎯 Características
+
+- ✅ **Next.js 16** com App Router e React Server Components
+- ✅ **TypeScript** em modo strict para máxima segurança de tipos
+- ✅ **Prisma ORM** com suporte para Neon/PlanetScale PostgreSQL
+- ✅ **Mercado Pago** integração completa para pagamentos
+- ✅ **Design System OKLCH** - cores modernas e acessíveis
+- ✅ **Light Mode padrão** + Dark Mode opcional
+- ✅ **Rate Limiting** em todas as APIs
+- ✅ **Security Headers** configurados
+- ✅ **Validação Zod** client e server-side
+- ✅ **Vercel Analytics** e Speed Insights
+- ✅ **Responsivo** e otimizado para mobile
+
+## 📁 Estrutura do Projeto
+
+```
+ebook-landing-final/
+├── app/
+│   ├── api/
+│   │   ├── leads/route.ts          # API de captura de leads
+│   │   ├── checkout/route.ts       # API de checkout Mercado Pago
+│   │   └── webhooks/
+│   │       └── mercadopago/route.ts # Webhook de pagamentos
+│   ├── layout.tsx                   # Layout raiz com providers
+│   ├── page.tsx                     # Landing page principal
+│   └── globals.css                  # Estilos globais + design system
+│
+├── components/
+│   ├── ui/                          # Componentes UI reutilizáveis (shadcn)
+│   ├── landing/                     # Componentes da landing page
+│   ├── theme-provider.tsx           # Provider de temas
+│   └── theme-switcher.tsx           # Switcher de tema minimalista
+│
+├── lib/
+│   ├── prisma.ts                    # Cliente Prisma singleton
+│   ├── utils.ts                     # Utilitários gerais
+│   ├── validations.ts               # Schemas Zod
+│   ├── rate-limit.ts                # Sistema de rate limiting
+│   └── mercadopago.ts               # Configuração Mercado Pago
+│
+├── prisma/
+│   └── schema.prisma                # Schema do banco de dados
+│
+├── middleware.ts                     # Middleware de segurança
+├── next.config.ts                    # Configuração Next.js otimizada
+└── .env.example                      # Exemplo de variáveis de ambiente
+```
+
+## 🚀 Como Rodar
+
+### 1. Instalar Dependências
+
+```bash
+npm install
+```
+
+### 2. Configurar Variáveis de Ambiente
+
+Copie `.env.example` para `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Preencha as variáveis necessárias.
+
+### 3. Configurar Banco de Dados (Neon)
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 4. Iniciar Servidor
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Segurança
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Rate Limiting em todas as APIs
+- Security Headers configurados
+- Validação server-side com Zod
+- TypeScript strict mode
+- Sanitização de inputs
 
-## Learn More
+## 📊 Banco de Dados
 
-To learn more about Next.js, take a look at the following resources:
+Modelos implementados:
+- **Lead** - Captura de emails
+- **User** - Usuários compradores
+- **Purchase** - Compras realizadas
+- **WebhookEvent** - Logs de webhooks
+- **PageView** - Analytics de visualizações
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 💳 Mercado Pago
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Integração completa com:
+- Criação de preferências
+- Checkout redirect
+- Webhook para confirmação
+- Tracking de pagamentos
 
-## Deploy on Vercel
+## 🎨 Design System
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- OKLCH color space
+- Light mode (padrão)
+- Dark mode opcional
+- Animações customizadas
+- Glass morphism
+- Gradientes modernos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Tecnologias
+
+- Next.js 16
+- TypeScript 5
+- Prisma ORM
+- Tailwind CSS 4
+- Mercado Pago SDK
+- Vercel Analytics
+- next-themes
+- Zod validation
+
+---
+
+Desenvolvido com ❤️ por Pablo Bispo usando Next.js e Claude Code
