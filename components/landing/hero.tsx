@@ -26,11 +26,11 @@ export function Hero() {
             {/* Badge */}
             <div className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm cursor-default">
               <span className="text-sm font-bold text-primary">@bispo.ia</span>
-              <div className="relative overflow-hidden h-5 w-64">
-                <span className="text-sm text-muted-foreground transition-all duration-300 absolute whitespace-nowrap group-hover:-translate-y-5 group-hover:opacity-0">
+              <div className="relative overflow-hidden h-5">
+                <span className="text-sm text-muted-foreground transition-all duration-300 whitespace-nowrap group-hover:-translate-y-5 group-hover:opacity-0">
                   Desenhando novas realidades com IA
                 </span>
-                <span className="text-sm text-muted-foreground transition-all duration-300 absolute whitespace-nowrap translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="text-sm text-muted-foreground transition-all duration-300 absolute top-0 left-0 whitespace-nowrap translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
                   AI Engineer & Creator
                 </span>
               </div>
