@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Sparkles } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { ThemeSwitcher } from '@/components/theme-switcher'
+import { useApp } from '@/contexts'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { isMobileMenuOpen, setMobileMenuOpen } = useApp()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,9 +20,10 @@ export function Header() {
   }, [])
 
   const navLinks = [
-    { href: '#beneficios', label: 'Benefícios' },
+    { href: '#problema', label: 'O Problema' },
+    { href: '#perfis', label: 'Perfis' },
     { href: '#modulos', label: 'Módulos' },
-    { href: '#depoimentos', label: 'Depoimentos' },
+    { href: '#casos', label: 'Casos' },
     { href: '#faq', label: 'FAQ' },
   ]
 
@@ -41,16 +43,16 @@ export function Header() {
             className="flex items-center gap-2 group"
           >
             <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Sparkles className="h-5 w-5 text-white" />
+              <span className="text-white font-bold text-sm">b.ia</span>
             </div>
             <div className="hidden sm:block">
-              <span className="font-bold text-lg">Ebooks com IA</span>
-              <p className="text-xs text-muted-foreground">Masterclass</p>
+              <span className="font-bold text-lg">@bispo.ia</span>
+              <p className="text-xs text-muted-foreground">O Engenheiro que Traduz</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -70,12 +72,12 @@ export function Header() {
               href="#checkout"
               className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold hover-lift transition-all duration-300 text-sm"
             >
-              Começar Agora
+              Quero Começar
             </Link>
 
             {/* Mobile menu button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
               aria-label="Toggle menu"
             >
@@ -96,7 +98,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => setMobileMenuOpen(false)}
                   className="px-4 py-3 rounded-lg hover:bg-secondary transition-colors font-medium"
                 >
                   {link.label}
@@ -104,10 +106,10 @@ export function Header() {
               ))}
               <Link
                 href="#checkout"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
                 className="mt-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-center hover-lift"
               >
-                Começar Agora
+                Quero Começar
               </Link>
             </nav>
           </div>

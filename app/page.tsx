@@ -1,11 +1,15 @@
-import { Header } from '@/components/landing/header'
-import { Hero } from '@/components/landing/hero'
-import { ValueProposition } from '@/components/landing/value-proposition'
-import { Benefits } from '@/components/landing/benefits'
-import { FAQ } from '@/components/landing/faq'
-import { CTASection } from '@/components/landing/cta-section'
-import { LeadCapture } from '@/components/landing/lead-capture'
-import { Footer } from '@/components/landing/footer'
+import {
+  Header,
+  Hero,
+  ProblemSection,
+  ProfilesSection,
+  ModulesSection,
+  TestimonialsSection,
+  FAQ,
+  CTASection,
+  LeadCapture,
+  Footer,
+} from '@/components/landing'
 
 export default function Home() {
   return (
@@ -13,13 +17,28 @@ export default function Home() {
       <Header />
 
       <main>
+        {/* 1. Hero - Promessa principal */}
         <Hero />
-        <ValueProposition />
-        <Benefits />
+
+        {/* 2. Problema - A frustração de não fazer nada útil */}
+        <ProblemSection />
+
+        {/* 3. Perfis - Os 3 caminhos (A, B, C) */}
+        <ProfilesSection />
+
+        {/* 4. Módulos - Estrutura do curso */}
+        <ModulesSection />
+
+        {/* 5. Casos - Números reais */}
+        <TestimonialsSection />
+
+        {/* 6. FAQ - Dúvidas frequentes */}
         <FAQ />
+
+        {/* 7. CTA - Checkout */}
         <CTASection />
 
-        {/* Lead Capture Section */}
+        {/* 8. Lead Capture - Email list */}
         <section className="py-20 bg-background">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <LeadCapture />

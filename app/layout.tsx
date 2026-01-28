@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,26 +19,27 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Masterclass: Crie Ebooks com IA em 3-5 Dias",
-    template: "%s | Ebooks com IA"
+    default: "@bispo.ia | Tire isso aí do papel",
+    template: "%s | @bispo.ia"
   },
-  description: "Aprenda a criar ebooks profissionais usando Inteligência Artificial, mantendo sua voz autoral e qualidade editorial. Transforme seu conhecimento em produtos digitais de alta conversão.",
-  keywords: ["ebooks", "inteligência artificial", "IA", "criação de conteúdo", "marketing digital", "infoprodutos", "produtos digitais"],
-  authors: [{ name: "Pablo Bispo" }],
-  creator: "Pablo Bispo",
+  description: "Você sabe o que a IA consegue fazer. Mas ainda não conseguiu fazer nada útil com ela. Vamos te ajudar a tirar isso aí do papel.",
+  keywords: ["ebooks", "inteligência artificial", "IA", "criação de conteúdo", "bispo.ia", "infoprodutos", "produtos digitais", "ebooks com IA"],
+  authors: [{ name: "Pablo Bispo", url: "https://bispo.ia" }],
+  creator: "@bispo.ia",
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: "/",
-    title: "Masterclass: Crie Ebooks com IA em 3-5 Dias",
-    description: "Aprenda a criar ebooks profissionais usando Inteligência Artificial, mantendo sua voz autoral e qualidade editorial.",
-    siteName: "Ebooks com IA",
+    title: "@bispo.ia | Tire isso aí do papel",
+    description: "Você sabe o que a IA consegue fazer. Mas ainda não conseguiu fazer nada útil com ela. Vamos te ajudar a tirar isso aí do papel.",
+    siteName: "@bispo.ia",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Masterclass: Crie Ebooks com IA em 3-5 Dias",
-    description: "Aprenda a criar ebooks profissionais usando Inteligência Artificial, mantendo sua voz autoral e qualidade editorial.",
+    title: "@bispo.ia | Tire isso aí do papel",
+    description: "Você sabe o que a IA consegue fazer. Mas ainda não conseguiu fazer nada útil com ela. Vamos te ajudar a tirar isso aí do papel.",
+    creator: "@bispo_ia",
   },
   robots: {
     index: true,
@@ -64,10 +64,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <ThemeProvider>
+        <Providers>
           {children}
-          <Toaster position="top-right" richColors />
-        </ThemeProvider>
+        </Providers>
         <Analytics />
         <SpeedInsights />
       </body>

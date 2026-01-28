@@ -4,21 +4,20 @@ import { CheckCircle2, Shield, Clock, Users } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 
 const features = [
-  '8 módulos completos em vídeo',
-  'Templates profissionais de formatação',
-  'Biblioteca com 100+ prompts testados',
-  'Checklist de qualidade editorial',
-  'Workshop bônus de Landing Pages',
-  'Grupo exclusivo no WhatsApp',
-  'Atualizações gratuitas vitalícias',
-  'Certificado digital de conclusão',
-  'Garantia incondicional de 7 dias',
+  '12 capítulos de fundamentos estratégicos',
+  'Templates preenchíveis de Avatar e Validação',
+  'Biblioteca de prompts testados',
+  'Checklist de 40 pontos para prontidão',
+  'Roadmap personalizado por perfil',
+  'Setup completo Hotmart/Kiwify',
+  'Workshop de Landing Pages',
+  'Acesso vitalício + atualizações',
 ]
 
 const trustBadges = [
   {
     icon: Shield,
-    text: 'Garantia de 7 dias',
+    text: '7 dias de garantia',
   },
   {
     icon: Clock,
@@ -26,16 +25,14 @@ const trustBadges = [
   },
   {
     icon: Users,
-    text: '500+ alunos',
+    text: 'Casos documentados',
   },
 ]
 
 export function CTASection() {
-  const regularPrice = 497
-  const salePrice = 247
-  const discount = Math.round(((regularPrice - salePrice) / regularPrice) * 100)
+  const price = 247
   const installments = 12
-  const installmentValue = salePrice / installments
+  const installmentValue = price / installments
 
   return (
     <section id="checkout" className="py-20 gradient-hero relative overflow-hidden">
@@ -46,22 +43,15 @@ export function CTASection() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Header - SEM ESCASSEZ ARTIFICIAL */}
         <div className="text-center mb-12 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-destructive/10 border border-destructive/20 mb-4">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-destructive"></span>
-            </span>
-            <span className="text-sm font-medium text-destructive">
-              Oferta por tempo limitado
-            </span>
-          </div>
-
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            Comece Hoje Sua Jornada de{' '}
-            <span className="text-gradient">Criação de Ebooks</span>
+            Pronto para{' '}
+            <span className="text-gradient">tirar isso aí do papel?</span>
           </h2>
+          <p className="text-lg text-muted-foreground">
+            Pagamento único. Acesso vitalício. Garantia de 7 dias.
+          </p>
         </div>
 
         {/* Pricing Card */}
@@ -70,19 +60,12 @@ export function CTASection() {
           <div className="absolute inset-0 glow-primary rounded-xl opacity-50" />
 
           <div className="relative">
-            {/* Price */}
+            {/* Price - SIMPLES, SEM TRUQUES */}
             <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-4 mb-2">
-                <span className="text-2xl text-muted-foreground line-through">
-                  {formatCurrency(regularPrice)}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-destructive text-destructive-foreground text-sm font-bold">
-                  {discount}% OFF
-                </span>
-              </div>
+              <p className="text-muted-foreground mb-2">Investimento único</p>
 
               <div className="text-5xl sm:text-6xl font-bold mb-2">
-                {formatCurrency(salePrice)}
+                {formatCurrency(price)}
               </div>
 
               <p className="text-muted-foreground">
@@ -90,6 +73,10 @@ export function CTASection() {
                 <span className="font-semibold text-foreground">
                   {installments}x de {formatCurrency(installmentValue)}
                 </span>
+              </p>
+
+              <p className="text-sm text-muted-foreground mt-2">
+                Sem truque. Esse é o preço.
               </p>
             </div>
 
@@ -114,7 +101,7 @@ export function CTASection() {
               href="#comprar"
               className="block w-full text-center px-8 py-5 rounded-xl bg-gradient-primary text-white font-bold text-lg hover-lift glow-primary transition-all duration-300 mb-6"
             >
-              Garantir Minha Vaga Agora
+              Quero Tirar do Papel Agora
             </a>
 
             {/* Trust badges */}
@@ -135,20 +122,22 @@ export function CTASection() {
 
             {/* Security note */}
             <p className="text-center text-xs text-muted-foreground mt-6">
-              🔒 Pagamento seguro processado pelo Mercado Pago
+              Pagamento seguro processado pelo Mercado Pago
             </p>
           </div>
         </div>
 
-        {/* Guarantee box */}
+        {/* Guarantee box - TOM HONESTO */}
         <div className="mt-8 p-6 glass-card text-center animate-fade-in">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-success/20 mb-4">
             <Shield className="h-6 w-6 text-success" />
           </div>
-          <h3 className="font-bold text-xl mb-2">Garantia Incondicional de 7 Dias</h3>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Teste todo o conteúdo sem riscos. Se não gostar, devolvemos 100% do seu investimento.
-            Sem perguntas, sem burocracias.
+          <h3 className="font-bold text-xl mb-2">Garantia de 7 Dias</h3>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+            7 dias para testar todo o conteúdo. Não gostou? Devolvemos 100%. Sem perguntas.
+          </p>
+          <p className="text-sm text-muted-foreground italic">
+            Não fingimos que nunca vamos vender. Mas vendemos quando faz sentido.
           </p>
         </div>
       </div>
