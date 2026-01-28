@@ -1,43 +1,43 @@
 'use client'
 
-import { Zap, Target, TrendingUp, Shield, Clock, Award } from 'lucide-react'
+import { Sparkles, Users, Code2, TrendingUp, FileText, Target } from 'lucide-react'
 
 const values = [
   {
-    icon: Zap,
-    title: 'Resultados Rápidos',
-    description: 'Crie seu primeiro ebook profissional em apenas 3-5 dias, não meses.',
-    color: 'from-yellow-500 to-orange-500',
-  },
-  {
-    icon: Target,
-    title: 'Foco e Clareza',
-    description: 'Método passo a passo validado. Sem enrolação, direto ao ponto.',
-    color: 'from-blue-500 to-cyan-500',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Escalável',
-    description: 'Crie quantos ebooks quiser. O processo fica mais rápido a cada um.',
-    color: 'from-green-500 to-emerald-500',
-  },
-  {
-    icon: Shield,
-    title: 'Garantia Total',
-    description: '7 dias para testar. Não gostou? Devolvemos 100% do investimento.',
+    icon: Sparkles,
+    title: 'Anti-Robô',
+    description: 'Ensina a usar IA sem parecer genérico. Voz autoral, não template. Conteúdo que ressoa, não que entedia.',
     color: 'from-purple-500 to-pink-500',
   },
   {
-    icon: Clock,
-    title: 'Acesso Vitalício',
-    description: 'Pague uma vez, tenha acesso para sempre. Sem mensalidades.',
-    color: 'from-red-500 to-rose-500',
+    icon: Users,
+    title: '3 Perfis Diferentes',
+    description: 'Não é one-size-fits-all. Criador Orgânico (A), Explorador de Nicho (B), ou Prestador de Serviço (C). Seu caminho, seu ritmo.',
+    color: 'from-blue-500 to-cyan-500',
   },
   {
-    icon: Award,
-    title: 'Suporte Premium',
-    description: 'Grupo exclusivo de alunos e suporte direto para suas dúvidas.',
+    icon: Code2,
+    title: '70% No-Code',
+    description: 'A maioria não precisa programar. ChatGPT + Canva resolvem. Mostramos quando cada ferramenta faz sentido.',
+    color: 'from-green-500 to-emerald-500',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Casos Reais',
+    description: 'Números reais, não promessas vagas. Marina fez R$ 14.006. Juliana fez R$ 43.000. Ricardo fez R$ 8.400 sem audiência.',
+    color: 'from-yellow-500 to-orange-500',
+  },
+  {
+    icon: FileText,
+    title: 'Templates Preenchíveis',
+    description: 'Não é teoria. É ferramenta pra usar hoje. Avatar 4 Camadas, Checklist de 40 pontos, Prompts testados.',
     color: 'from-indigo-500 to-violet-500',
+  },
+  {
+    icon: Target,
+    title: 'Utilidade > Espetáculo',
+    description: 'Edição bonita é legal por 15 segundos. Resolver problema real muda sua vida. Foco no que importa.',
+    color: 'from-red-500 to-rose-500',
   },
 ]
 
@@ -48,11 +48,10 @@ export function ValueProposition() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in-up">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            Por que escolher nossa{' '}
-            <span className="text-gradient">Masterclass?</span>
+            <span className="text-gradient">Instrumento, não fim.</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Transforme seu conhecimento em ebooks profissionais com um método validado e comprovado
+            IA é martelo, não quadro na parede. É o que você faz com ela que importa.
           </p>
         </div>
 

@@ -2,6 +2,7 @@ import {
   Header,
   Hero,
   ProblemSection,
+  ValueProposition,
   ProfilesSection,
   ModulesSection,
   TestimonialsSection,
@@ -23,22 +24,25 @@ export default function Home() {
         {/* 2. Problema - A frustração de não fazer nada útil */}
         <ProblemSection />
 
-        {/* 3. Perfis - Os 3 caminhos (A, B, C) */}
+        {/* 3. Diferenciais - Por que é diferente */}
+        <ValueProposition />
+
+        {/* 4. Perfis - Os 3 caminhos (A, B, C) */}
         <ProfilesSection />
 
-        {/* 4. Módulos - Estrutura do curso */}
+        {/* 5. Módulos - Estrutura do curso */}
         <ModulesSection />
 
-        {/* 5. Casos - Números reais */}
+        {/* 6. Casos - Números reais */}
         <TestimonialsSection />
 
-        {/* 6. FAQ - Dúvidas frequentes */}
+        {/* 7. FAQ - Dúvidas frequentes */}
         <FAQ />
 
-        {/* 7. CTA - Checkout */}
+        {/* 8. CTA - Checkout */}
         <CTASection />
 
-        {/* 8. Lead Capture - Email list */}
+        {/* 9. Lead Capture - Email list */}
         <section className="py-20 bg-background">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <LeadCapture />

@@ -5,54 +5,54 @@ import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'Preciso ter experiência com IA ou tecnologia?',
+    question: 'Preciso saber programar?',
     answer:
-      'Não! A masterclass foi criada para iniciantes. Explicamos tudo passo a passo, desde o básico até técnicas avançadas. Se você sabe usar o Google Docs, você consegue criar ebooks com IA.',
+      'Não. 70% do curso é no-code. ChatGPT + Canva resolvem a maioria dos casos. Se você sabe usar Google Docs, você consegue criar ebooks com IA. Mostramos quando vale a pena usar código - e quando não vale.',
+  },
+  {
+    question: 'Funciona para qualquer nicho?',
+    answer:
+      'Depende. O método funciona, mas nem todo nicho tem demanda. Por isso o Capítulo 6 é dedicado a validação de nicho. Você vai descobrir se seu nicho tem potencial antes de criar.',
+  },
+  {
+    question: 'E se eu já tenho conteúdo?',
+    answer:
+      'Melhor ainda. Você é Perfil A (Criador Orgânico). Vídeos, posts, lives, podcasts - tudo pode virar ebook. A Marina transformou vídeos do YouTube em R$ 14.006 em 3 meses.',
+  },
+  {
+    question: 'E se eu não tenho nada criado?',
+    answer:
+      'Sem problema. Você é Perfil B (Explorador de Nicho). O Ricardo começou do zero e fez R$ 8.400 em 3 meses, sem audiência prévia. O curso ensina a pesquisar e criar do zero.',
+  },
+  {
+    question: 'Posso oferecer como serviço?',
+    answer:
+      'Sim. Esse é o Perfil C (Prestador de Serviço). A Juliana fez R$ 43.000 com 18 clientes em 6 meses. O curso inclui precificação e processos para trabalhar com clientes.',
   },
   {
     question: 'Quanto tempo leva para criar um ebook?',
     answer:
-      'Com nosso método, você consegue criar um ebook profissional em 3-5 dias. Isso inclui pesquisa, escrita, revisão e formatação. Quanto mais você pratica, mais rápido fica o processo.',
+      'Depende do seu perfil: Perfil A (com conteúdo): 3-5 dias. Perfil B (do zero): 5-10 dias. Perfil C (para cliente): varia com o projeto.',
   },
   {
-    question: 'As IAs são gratuitas ou preciso pagar?',
+    question: 'O conteúdo vai parecer feito por IA?',
     answer:
-      'Mostramos como usar tanto ferramentas gratuitas (ChatGPT, Claude) quanto pagas. Para começar, as versões gratuitas são suficientes. Conforme você escala, pode investir nas versões premium.',
+      'Não, se você seguir o método. O Capítulo 4 (Princípios Anti-Robô) ensina exatamente isso. Voz autoral, experiência real, opinião. Conteúdo que ressoa, não genérico.',
   },
   {
-    question: 'Posso usar este método para qualquer nicho?',
+    question: 'A garantia é real?',
     answer:
-      'Sim! O método funciona para qualquer área de conhecimento: desenvolvimento pessoal, negócios, culinária, saúde, tecnologia, etc. Mostramos exemplos práticos de vários nichos diferentes.',
-  },
-  {
-    question: 'Como funciona a garantia de 7 dias?',
-    answer:
-      'Você tem 7 dias após a compra para testar todo o conteúdo. Se por qualquer motivo não gostar, basta enviar um email e devolvemos 100% do seu investimento, sem perguntas ou burocracias.',
-  },
-  {
-    question: 'Vou aprender a vender o ebook também?',
-    answer:
-      'Sim! Além de criar, você aprende estratégias completas de precificação, posicionamento, criação de landing pages e lançamento. O objetivo é você ter um produto pronto para vender.',
-  },
-  {
-    question: 'Recebo certificado ao concluir?',
-    answer:
-      'Sim! Ao completar os módulos e criar seu primeiro ebook, você recebe um certificado digital de conclusão que pode usar em seu portfólio ou redes sociais.',
+      'Sim. 7 dias para testar todo o conteúdo. Não gostou? Devolvemos 100%. Sem perguntas, sem burocracia. Não fazemos escassez artificial. Não fingimos que nunca vamos vender.',
   },
   {
     question: 'O conteúdo fica disponível para sempre?',
     answer:
-      'Sim! É pagamento único e acesso vitalício. Você pode assistir as aulas quantas vezes quiser, no seu ritmo, sem pressa. E ainda recebe todas as atualizações futuras gratuitamente.',
-  },
-  {
-    question: 'Tem suporte caso eu tenha dúvidas?',
-    answer:
-      'Sim! Você entra em um grupo exclusivo no WhatsApp com outros alunos e tem suporte direto para tirar dúvidas. Além disso, fazemos lives mensais para Q&A e compartilhar cases de sucesso.',
+      'Sim. Pagamento único e acesso vitalício. Você pode revisar o conteúdo quantas vezes quiser, no seu ritmo. E ainda recebe todas as atualizações futuras gratuitamente.',
   },
   {
     question: 'Qual a forma de pagamento?',
     answer:
-      'Aceitamos cartão de crédito (em até 12x), PIX e boleto bancário. O pagamento é processado pela Mercado Pago, uma das plataformas mais seguras do Brasil.',
+      'Aceitamos cartão de crédito (em até 12x), PIX e boleto bancário. O pagamento é processado pelo Mercado Pago, plataforma segura e confiável.',
   },
 ]
 
@@ -69,7 +69,7 @@ export function FAQ() {
             <span className="text-gradient">Frequentes</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Tire todas as suas dúvidas antes de começar
+            Respondemos direto. Sem enrolação.
           </p>
         </div>
 
@@ -113,7 +113,7 @@ export function FAQ() {
         <div className="mt-12 text-center p-8 glass-card">
           <h3 className="font-bold text-xl mb-2">Ainda tem dúvidas?</h3>
           <p className="text-muted-foreground mb-4">
-            Entre em contato conosco. Respondemos em até 24 horas.
+            pablofernando@live.com • Respondemos em até 24h úteis.
           </p>
           <a
             href="mailto:pablofernando@live.com"
