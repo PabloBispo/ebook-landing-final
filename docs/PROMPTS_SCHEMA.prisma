@@ -1,0 +1,369 @@
+// Prompt Repository System - Prisma Schema
+// Adicionar ao schema.prisma existente
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  USER   // Usuário comum - pode usar prompts
+  STAFF  // Staff - pode criar/editar prompts
+  ADMIN  // Admin - acesso total
+}
+
+enum PromptStatus {
+  DRAFT      // Rascunho (visível apenas para staff)
+  PUBLISHED  // Publicado (visível para todos)
+  ARCHIVED   // Arquivado (não aparece em listagens)
+}
+
+enum AIModel {
+  CHATGPT_4       // ChatGPT-4
+  CHATGPT_4O      // ChatGPT-4o
+  CHATGPT_35      // ChatGPT-3.5
+  CLAUDE_OPUS     // Claude Opus 4.5
+  CLAUDE_SONNET   // Claude Sonnet 4.5
+  CLAUDE_HAIKU    // Claude Haiku 3.5
+  GEMINI_2_FLASH  // Gemini 2.0 Flash
+  GEMINI_15_PRO   // Gemini 1.5 Pro
+  GEMINI_15_FLASH // Gemini 1.5 Flash
+  UNIVERSAL       // Funciona em qualquer modelo
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  phone         String?
+  emailVerified DateTime?
+  role          UserRole @default(USER)
+  image         String?
+
+  // Relacionamentos de Checkout (existente)
+  purchases     Purchase[]
+
+  // Relacionamentos de Prompts (novo)
+  createdPrompts Prompt[]      @relation("PromptCreator")
+  promptUsage    PromptUsage[]
+  favoritePrompts FavoritePrompt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Prompt {
+  id          String       @id @default(cuid())
+  alias       String       @unique // slug amigável (ex: "estrutura-ebook-ficcao")
+  title       String                // Título exibido
+  description String       @db.Text // Descrição detalhada
+
+  // Versionamento
+  currentVersion String     @default("v1")
+  versions       PromptVersion[]
+
+  // Categorização
+  tags        PromptTag[]
+  models      AIModel[]           // Modelos recomendados
+  category    PromptCategory? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+
+  // Controle
+  status      PromptStatus @default(DRAFT)
+  creatorId   String
+  creator     User         @relation("PromptCreator", fields: [creatorId], references: [id])
+
+  // Estatísticas
+  usage       PromptUsage[]
+  favorites   FavoritePrompt[]
+  viewCount   Int          @default(0)
+  copyCount   Int          @default(0)
+  shareCount  Int          @default(0)
+
+  // Metadados
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  publishedAt DateTime?
+
+  @@index([alias])
+  @@index([status])
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+model PromptVersion {
+  id        String   @id @default(cuid())
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  version   String   // "v1", "v2", "v3"
+  content   String   @db.Text // Template do prompt com {{placeholders}}
+
+  // Placeholders
+  placeholders Json   // [{ key: "topico", label: "Tópico do ebook", type: "text", required: true }]
+
+  // Metadata
+  changelog String?  @db.Text // O que mudou nesta versão
+  createdAt DateTime @default(now())
+
+  @@unique([promptId, version])
+  @@index([promptId])
+}
+
+model PromptCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  icon        String?  // Emoji ou nome do ícone
+  color       String?  // Hex color
+  order       Int      @default(0)
+
+  prompts     Prompt[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([order])
+}
+
+model PromptTag {
+  id       String   @id @default(cuid())
+  name     String   @unique
+  slug     String   @unique
+  color    String?  // Hex color para exibição
+
+  prompts  Prompt[]
+
+  createdAt DateTime @default(now())
+
+  @@index([slug])
+}
+
+model PromptUsage {
+  id        String   @id @default(cuid())
+
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  version   String   // Versão usada
+  model     AIModel? // Modelo escolhido pelo usuário
+
+  // Dados preenchidos (anonimizado para analytics)
+  filledData Json?   // Placeholders preenchidos (opcional)
+
+  // Metadata
+  ipAddress  String?
+  userAgent  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([promptId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([model])
+}
+
+model FavoritePrompt {
+  id        String   @id @default(cuid())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, promptId])
+  @@index([userId])
+  @@index([promptId])
+}
+
+// ============================================
+// SEED DATA EXAMPLE
+// ============================================
+
+// prisma/seed-prompts.ts
+
+/*
+import { PrismaClient, UserRole, PromptStatus, AIModel } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function seedPrompts() {
+  // 1. Criar usuário staff
+  const staff = await prisma.user.upsert({
+    where: { email: 'pablofernando@live.com' },
+    update: { role: UserRole.STAFF },
+    create: {
+      email: 'pablofernando@live.com',
+      name: 'Pablo Fernando',
+      role: UserRole.STAFF,
+    },
+  })
+
+  // 2. Criar categorias
+  const estruturaCategory = await prisma.promptCategory.create({
+    data: {
+      name: 'Estrutura de Ebooks',
+      slug: 'estrutura-ebooks',
+      description: 'Prompts para criar estruturas completas de ebooks',
+      icon: '📚',
+      color: '#3B82F6',
+      order: 1,
+    },
+  })
+
+  const edicaoCategory = await prisma.promptCategory.create({
+    data: {
+      name: 'Edição e Revisão',
+      slug: 'edicao-revisao',
+      description: 'Prompts para revisar e melhorar textos',
+      icon: '✏️',
+      color: '#10B981',
+      order: 2,
+    },
+  })
+
+  // 3. Criar tags
+  const ebookTag = await prisma.promptTag.create({
+    data: {
+      name: 'ebook',
+      slug: 'ebook',
+      color: '#3B82F6',
+    },
+  })
+
+  const estruturaTag = await prisma.promptTag.create({
+    data: {
+      name: 'estrutura',
+      slug: 'estrutura',
+      color: '#8B5CF6',
+    },
+  })
+
+  const ficcaoTag = await prisma.promptTag.create({
+    data: {
+      name: 'ficção',
+      slug: 'ficcao',
+      color: '#EC4899',
+    },
+  })
+
+  // 4. Criar prompt exemplo
+  const prompt = await prisma.prompt.create({
+    data: {
+      alias: 'estrutura-ebook-ficcao',
+      title: 'Estrutura de Ebook de Ficção',
+      description: 'Crie a estrutura completa de um ebook de ficção com capítulos, sinopse e arco narrativo.',
+      currentVersion: 'v1',
+      models: [AIModel.CHATGPT_4, AIModel.CLAUDE_OPUS],
+      status: PromptStatus.PUBLISHED,
+      categoryId: estruturaCategory.id,
+      creatorId: staff.id,
+      tags: {
+        connect: [
+          { id: ebookTag.id },
+          { id: estruturaTag.id },
+          { id: ficcaoTag.id },
+        ],
+      },
+      versions: {
+        create: {
+          version: 'v1',
+          content: `Você é um especialista em criar estruturas de ebooks de ficção que engajam e convertem leitores.
+
+INFORMAÇÕES:
+- Tópico: {{topico}}
+- Público-alvo: {{publico_alvo}}
+- Tom desejado: {{tom}}
+
+TAREFA:
+Crie uma estrutura completa de ebook de ficção seguindo este formato:
+
+1. TÍTULO E SUBTÍTULO
+   - Título impactante e memorável
+   - Subtítulo que clarifica o tema
+
+2. SINOPSE (200 palavras)
+   - Hook inicial
+   - Conflito principal
+   - Promessa de transformação
+
+3. ESTRUTURA DE CAPÍTULOS (10-15 capítulos)
+   Para cada capítulo:
+   - Número e título
+   - Resumo (50 palavras)
+   - Objetivo do capítulo
+   - Gancho para próximo capítulo
+
+4. ARCO NARRATIVO
+   - Ponto de partida
+   - Conflito crescente
+   - Clímax
+   - Resolução
+
+FORMATO DE SAÍDA:
+- Markdown bem formatado
+- Títulos hierárquicos claros
+- Listas e bullet points
+
+Comece agora:`,
+          placeholders: [
+            {
+              key: 'topico',
+              label: 'Tópico do ebook',
+              type: 'text',
+              required: true,
+              description: 'Ex: Romance de época vitoriana',
+            },
+            {
+              key: 'publico_alvo',
+              label: 'Público-alvo',
+              type: 'text',
+              required: true,
+              description: 'Ex: Mulheres 25-45 anos, fãs de romance',
+            },
+            {
+              key: 'tom',
+              label: 'Tom desejado',
+              type: 'text',
+              required: false,
+              defaultValue: 'Envolvente e acessível',
+              description: 'Ex: Dramático, leve, inspirador',
+            },
+          ],
+          changelog: 'Versão inicial',
+        },
+      },
+      publishedAt: new Date(),
+    },
+  })
+
+  console.log('✅ Seed de prompts completo!')
+  console.log(`   - 1 usuário staff criado: ${staff.email}`)
+  console.log(`   - 2 categorias criadas`)
+  console.log(`   - 3 tags criadas`)
+  console.log(`   - 1 prompt criado: ${prompt.alias}`)
+}
+
+seedPrompts()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+*/
