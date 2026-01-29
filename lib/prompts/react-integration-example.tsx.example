@@ -404,13 +404,13 @@ export function PlaceholderFormWithStorage({
 
   const {
     values,
-    errors,
-    preview,
+    errors: _errors,
+    preview: _preview,
     setValue,
     setValues,
     validate,
     fill,
-    getStats,
+    getStats: _getStats,
   } = usePlaceholderEngine({ template, placeholders })
 
   // Carregar valores salvos na montagem

@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
  * Retorna detalhes completos de um prompt incluindo todas as versões
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
