@@ -1,0 +1,463 @@
+/**
+ * EXEMPLO DE INTEGRAÇÃO COM REACT
+ * Sprint 2 - Task #29
+ *
+ * Este arquivo mostra como usar o sistema de placeholders
+ * em componentes React. Será a base para Task #30 (UI Components).
+ *
+ * NÃO EXECUTAR - APENAS EXEMPLO
+ */
+
+'use client'
+
+import { useState, useEffect } from 'react'
+import { PlaceholderEngine } from './placeholder-engine'
+import type { Placeholder } from './types'
+
+// ============================================================================
+// EXEMPLO 1: Hook Personalizado
+// ============================================================================
+
+interface UsePlaceholderEngineProps {
+  template: string
+  placeholders: Placeholder[]
+}
+
+export function usePlaceholderEngine({
+  template,
+  placeholders,
+}: UsePlaceholderEngineProps) {
+  const [engine] = useState(
+    () => new PlaceholderEngine(template, placeholders)
+  )
+  const [values, setValues] = useState<Record<string, string>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [preview, setPreview] = useState('')
+
+  // Atualiza preview quando valores mudam
+  useEffect(() => {
+    const result = engine.fill(values)
+    if (result.success && result.content) {
+      setPreview(result.content)
+      setErrors({})
+    } else {
+      setErrors(result.errors || {})
+    }
+  }, [values, engine])
+
+  const setValue = (key: string, value: string) => {
+    setValues(prev => ({ ...prev, [key]: value }))
+  }
+
+  const validate = () => {
+    const validation = engine.validate(values)
+    setErrors(validation.errors)
+    return validation.valid
+  }
+
+  const fill = () => {
+    return engine.fill(values)
+  }
+
+  const getStats = () => {
+    return engine.getStats(values)
+  }
+
+  return {
+    values,
+    errors,
+    preview,
+    setValue,
+    setValues,
+    validate,
+    fill,
+    getStats,
+    placeholders,
+  }
+}
+
+// ============================================================================
+// EXEMPLO 2: Componente de Formulário
+// ============================================================================
+
+interface PlaceholderFormProps {
+  template: string
+  placeholders: Placeholder[]
+  onSubmit: (content: string) => void
+}
+
+export function PlaceholderForm({
+  template,
+  placeholders,
+  onSubmit,
+}: PlaceholderFormProps) {
+  const {
+    values,
+    errors,
+    preview,
+    setValue,
+    validate,
+    fill,
+    getStats,
+  } = usePlaceholderEngine({ template, placeholders })
+
+  const stats = getStats()
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (validate()) {
+      const result = fill()
+      if (result.success && result.content) {
+        onSubmit(result.content)
+      }
+    }
+  }
+
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      {/* Formulário */}
+      <div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="mb-4">
+            <div className="text-sm text-gray-600">
+              Progresso: {stats.percentage}% ({stats.filled}/{stats.total})
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all"
+                style={{ width: `${stats.percentage}%` }}
+              />
+            </div>
+          </div>
+
+          {placeholders.map(field => (
+            <PlaceholderField
+              key={field.key}
+              field={field}
+              value={values[field.key] || ''}
+              error={errors[field.key]}
+              onChange={value => setValue(field.key, value)}
+            />
+          ))}
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          >
+            Gerar Prompt
+          </button>
+        </form>
+      </div>
+
+      {/* Preview */}
+      <div>
+        <div className="bg-gray-50 p-4 rounded border">
+          <h3 className="font-semibold mb-2">Preview:</h3>
+          <pre className="whitespace-pre-wrap text-sm">{preview}</pre>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
+// EXEMPLO 3: Componente de Campo Individual
+// ============================================================================
+
+interface PlaceholderFieldProps {
+  field: Placeholder
+  value: string
+  error?: string
+  onChange: (value: string) => void
+}
+
+export function PlaceholderField({
+  field,
+  value,
+  error,
+  onChange,
+}: PlaceholderFieldProps) {
+  const renderInput = () => {
+    switch (field.type) {
+      case 'textarea':
+        return (
+          <textarea
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder={field.placeholder || field.defaultValue}
+            maxLength={field.maxLength}
+            className="w-full border rounded p-2"
+            rows={4}
+          />
+        )
+
+      case 'select':
+        return (
+          <select
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            className="w-full border rounded p-2"
+          >
+            <option value="">Selecione...</option>
+            {field.options?.map(option => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        )
+
+      case 'number':
+        return (
+          <input
+            type="number"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder={field.placeholder || field.defaultValue}
+            className="w-full border rounded p-2"
+          />
+        )
+
+      case 'email':
+        return (
+          <input
+            type="email"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder={field.placeholder || field.defaultValue}
+            className="w-full border rounded p-2"
+          />
+        )
+
+      case 'url':
+        return (
+          <input
+            type="url"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder={field.placeholder || field.defaultValue}
+            className="w-full border rounded p-2"
+          />
+        )
+
+      default:
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder={field.placeholder || field.defaultValue}
+            maxLength={field.maxLength}
+            className="w-full border rounded p-2"
+          />
+        )
+    }
+  }
+
+  return (
+    <div>
+      <label className="block mb-1">
+        <span className="font-medium">
+          {field.label}
+          {field.required && <span className="text-red-500">*</span>}
+        </span>
+      </label>
+
+      {field.description && (
+        <p className="text-sm text-gray-600 mb-2">{field.description}</p>
+      )}
+
+      {renderInput()}
+
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
+      {field.maxLength && value && (
+        <p className="text-sm text-gray-500 mt-1">
+          {value.length}/{field.maxLength}
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ============================================================================
+// EXEMPLO 4: Uso em Página
+// ============================================================================
+
+export function ExemploDeUsoEmPagina() {
+  const template = `
+Você é especialista em {{area}}.
+Crie conteúdo sobre {{topico}} para {{publico:Iniciantes}}.
+`.trim()
+
+  const placeholders: Placeholder[] = [
+    {
+      key: 'area',
+      label: 'Área',
+      type: 'select',
+      required: true,
+      options: ['Marketing', 'Tecnologia', 'Negócios'],
+      description: 'Área de expertise',
+    },
+    {
+      key: 'topico',
+      label: 'Tópico',
+      type: 'text',
+      required: true,
+      maxLength: 100,
+      description: 'Sobre o que criar conteúdo',
+    },
+    {
+      key: 'publico',
+      label: 'Público',
+      type: 'select',
+      required: false,
+      defaultValue: 'Iniciantes',
+      options: ['Iniciantes', 'Intermediário', 'Avançado'],
+      description: 'Nível do público-alvo',
+    },
+  ]
+
+  const handleSubmit = (content: string) => {
+    console.log('Prompt gerado:', content)
+    // Aqui você pode enviar para API, copiar para clipboard, etc.
+  }
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Gerador de Prompts</h1>
+
+      <PlaceholderForm
+        template={template}
+        placeholders={placeholders}
+        onSubmit={handleSubmit}
+      />
+    </div>
+  )
+}
+
+// ============================================================================
+// EXEMPLO 5: Integração com API
+// ============================================================================
+
+export function usePromptAPI() {
+  const [loading, setLoading] = useState(false)
+
+  const gerarPrompt = async (
+    template: string,
+    placeholders: Placeholder[],
+    values: Record<string, string>
+  ) => {
+    setLoading(true)
+
+    try {
+      const response = await fetch('/api/prompts/fill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template, placeholders, values }),
+      })
+
+      const result = await response.json()
+      return result
+    } catch (error) {
+      console.error('Erro ao gerar prompt:', error)
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { gerarPrompt, loading }
+}
+
+// ============================================================================
+// EXEMPLO 6: Salvamento Local
+// ============================================================================
+
+export function usePlaceholderStorage(storageKey: string) {
+  const [values, setValues] = useState<Record<string, string>>(() => {
+    if (typeof window === 'undefined') return {}
+
+    const saved = localStorage.getItem(storageKey)
+    return saved ? JSON.parse(saved) : {}
+  })
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(values))
+  }, [values, storageKey])
+
+  return [values, setValues] as const
+}
+
+// ============================================================================
+// EXEMPLO 7: Uso Completo com Persistência
+// ============================================================================
+
+export function PlaceholderFormWithStorage({
+  template,
+  placeholders,
+  onSubmit,
+  storageKey,
+}: PlaceholderFormProps & { storageKey: string }) {
+  const [storedValues, setStoredValues] = usePlaceholderStorage(storageKey)
+
+  const {
+    values,
+    errors,
+    preview,
+    setValue,
+    setValues,
+    validate,
+    fill,
+    getStats,
+  } = usePlaceholderEngine({ template, placeholders })
+
+  // Carregar valores salvos na montagem
+  useEffect(() => {
+    if (Object.keys(storedValues).length > 0) {
+      setValues(storedValues)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Salvar valores quando mudam
+  useEffect(() => {
+    setStoredValues(values)
+  }, [values, setStoredValues])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (validate()) {
+      const result = fill()
+      if (result.success && result.content) {
+        onSubmit(result.content)
+      }
+    }
+  }
+
+  const handleClear = () => {
+    setValues({})
+    setStoredValues({})
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Mesma estrutura do PlaceholderForm */}
+      {/* ... */}
+
+      <div className="flex gap-2">
+        <button type="submit" className="flex-1 bg-blue-600 text-white py-2">
+          Gerar
+        </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="px-4 bg-gray-300 text-gray-700"
+        >
+          Limpar
+        </button>
+      </div>
+    </form>
+  )
+}
