@@ -10,6 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums for Prompts System
+enum UserRole {
+  USER
+  STAFF
+  ADMIN
+}
+
+enum PromptStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AIModel {
+  CHATGPT_4
+  CHATGPT_35
+  CLAUDE_OPUS
+  CLAUDE_SONNET
+  GEMINI_2_FLASH
+  GEMINI_15_PRO
+  UNIVERSAL
+}
+
 // Model for lead capture (email list)
 model Lead {
   id        String   @id @default(cuid())
@@ -33,9 +56,14 @@ model User {
   name          String
   phone         String?
   emailVerified DateTime?
+  role          UserRole   @default(USER)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   purchases     Purchase[]
+
+  // Prompts System relationships
+  createdPrompts Prompt[]      @relation("PromptCreator")
+  promptUsage    PromptUsage[]
 
   @@index([email])
   @@map("users")
@@ -98,4 +126,120 @@ model PageView {
   @@index([createdAt])
   @@index([utmSource])
   @@map("page_views")
+}
+
+// ============================================
+// PROMPTS REPOSITORY SYSTEM
+// ============================================
+
+// Main prompt model with hybrid nomenclature (slug + alias)
+model Prompt {
+  id String @id @default(cuid())
+
+  // Nomenclatura híbrida
+  slug  String @unique // URL-friendly: "criar-avatar-profundo"
+  alias String @unique // Human-friendly: "AVATAR-01"
+  title String
+
+  description String @db.Text
+
+  // Categorização
+  category   PromptCategory? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  tags       PromptTag[]
+
+  // Metadata
+  sourceChapter String? // e.g., "cap-07"
+  status        PromptStatus @default(DRAFT)
+  creatorId     String
+  creator       User         @relation("PromptCreator", fields: [creatorId], references: [id])
+
+  // Versões multi-modelo
+  versions PromptVersion[]
+
+  // Placeholders (JSON)
+  placeholders Json @default("[]")
+
+  // Analytics
+  usage     PromptUsage[]
+  viewCount Int           @default(0)
+  copyCount Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  @@index([slug])
+  @@index([alias])
+  @@index([status])
+  @@map("prompts")
+}
+
+// Versões de prompts por modelo de IA
+model PromptVersion {
+  id       String @id @default(cuid())
+  promptId String
+  prompt   Prompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  version       String? // e.g., "v1", "v2" (optional)
+  modelTag      String // e.g., "chatgpt-4", "claude-opus", "universal"
+  content       String  @db.Text
+  isRecommended Boolean @default(false)
+  notes         String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([promptId, modelTag, version])
+  @@index([promptId])
+  @@map("prompt_versions")
+}
+
+// Categorias de prompts
+model PromptCategory {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String? @db.Text
+  icon        String? // emoji ou icon name
+  order       Int     @default(0)
+
+  prompts Prompt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("prompt_categories")
+}
+
+// Tags para prompts
+model PromptTag {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  prompts Prompt[]
+
+  createdAt DateTime @default(now())
+
+  @@map("prompt_tags")
+}
+
+// Rastreamento de uso de prompts
+model PromptUsage {
+  id String @id @default(cuid())
+
+  promptId String
+  prompt   Prompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  modelTag String
+  version  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([promptId])
+  @@index([userId])
+  @@map("prompt_usage")
 }
