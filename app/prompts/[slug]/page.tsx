@@ -5,6 +5,10 @@ import { useParams } from 'next/navigation'
 import { ModelSelector } from '../components/ModelSelector'
 import { PromptContent } from '../components/PromptContent'
 import { CopyButton } from '../components/CopyButton'
+import { PlaceholderForm } from './components/PlaceholderForm'
+import { PromptPreview } from './components/PromptPreview'
+import type { Placeholder } from '@/lib/prompts/types'
+import { fillTemplate } from '@/lib/prompts/parser'
 
 interface Prompt {
   id: string
@@ -14,6 +18,7 @@ interface Prompt {
   description: string
   category: { name: string; icon: string } | null
   tags: { name: string }[]
+  placeholders: Placeholder[]
   versions: {
     modelTag: string
     content: string
@@ -28,6 +33,7 @@ export default function PromptDetailPage() {
   const [prompt, setPrompt] = useState<Prompt | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedModel, setSelectedModel] = useState<string>('')
+  const [placeholderValues, setPlaceholderValues] = useState<Record<string, string>>({})
 
   useEffect(() => {
     if (params.slug) {
@@ -38,11 +44,12 @@ export default function PromptDetailPage() {
   async function fetchPrompt(slug: string) {
     try {
       const res = await fetch(`/api/prompts/${slug}`)
-      const data = await res.json()
+      const response = await res.json()
+      const data = response.data
       setPrompt(data)
 
       // Selecionar versão recomendada
-      const recommended = data.versions.find((v: any) => v.isRecommended)
+      const recommended = data?.versions?.find((v: any) => v.isRecommended)
       if (recommended) {
         setSelectedModel(recommended.modelTag)
       } else if (data.versions[0]) {
@@ -80,6 +87,12 @@ export default function PromptDetailPage() {
   }
 
   const currentVersion = prompt.versions.find(v => v.modelTag === selectedModel)
+  const hasPlaceholders = prompt.placeholders && prompt.placeholders.length > 0
+
+  // Get filled content
+  const filledContent = currentVersion && hasPlaceholders
+    ? fillTemplate(currentVersion.content, placeholderValues)
+    : currentVersion?.content || ''
 
   return (
     <div className="min-h-screen bg-background">
@@ -137,20 +150,44 @@ export default function PromptDetailPage() {
           />
         </div>
 
-        {/* Prompt Content */}
-        {currentVersion && (
-          <>
-            <PromptContent content={currentVersion.content} />
+        {/* Placeholder Form (if has placeholders) */}
+        {currentVersion && hasPlaceholders && (
+          <div className="mb-8 p-6 rounded-lg border bg-card">
+            <h2 className="text-xl font-semibold mb-4">Personalize seu prompt</h2>
+            <PlaceholderForm
+              placeholders={prompt.placeholders}
+              onValuesChange={setPlaceholderValues}
+            />
+          </div>
+        )}
 
-            <div className="mt-6">
-              <CopyButton
-                content={currentVersion.content}
-                promptId={prompt.id}
-                slug={prompt.slug}
-                modelTag={selectedModel}
-              />
-            </div>
-          </>
+        {/* Preview (if has placeholders) */}
+        {currentVersion && hasPlaceholders && (
+          <div className="mb-6">
+            <PromptPreview
+              template={currentVersion.content}
+              values={placeholderValues}
+            />
+          </div>
+        )}
+
+        {/* Prompt Content (if no placeholders, show original) */}
+        {currentVersion && !hasPlaceholders && (
+          <PromptContent content={currentVersion.content} />
+        )}
+
+        {/* Copy Button */}
+        {currentVersion && (
+          <div className="mt-6">
+            <CopyButton
+              content={filledContent}
+              promptId={prompt.id}
+              slug={prompt.slug}
+              modelTag={selectedModel}
+              placeholders={hasPlaceholders ? prompt.placeholders : undefined}
+              values={hasPlaceholders ? placeholderValues : undefined}
+            />
+          </div>
         )}
 
         {/* Stats */}
