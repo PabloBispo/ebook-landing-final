@@ -1,5 +1,5 @@
-import { auth } from './auth-options'
-import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { prisma } from '@/lib/prisma'
 import { UserRole } from '@prisma/client'
 
 export interface Session {
@@ -12,22 +12,42 @@ export interface Session {
 }
 
 /**
- * Get current user session using NextAuth
+ * Get current user session from cookies
+ * This is a placeholder implementation until full auth is set up
+ *
+ * For now, we check for a simple user_id cookie
+ * In production, this should use proper JWT/session tokens
  */
 export async function getSession(): Promise<Session | null> {
   try {
-    const session = await auth()
+    const cookieStore = await cookies()
+    const userId = cookieStore.get('user_id')?.value
 
-    if (!session?.user) {
+    if (!userId) {
+      return null
+    }
+
+    // Fetch user from database
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      }
+    })
+
+    if (!user) {
       return null
     }
 
     return {
       user: {
-        id: (session.user as any).id || '',
-        email: session.user.email || '',
-        name: session.user.name || '',
-        role: ((session.user as any).role as UserRole) || 'USER',
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
       }
     }
   } catch (error) {
@@ -37,49 +57,18 @@ export async function getSession(): Promise<Session | null> {
 }
 
 /**
- * Middleware to require STAFF or ADMIN role
- * Returns JSON error response if unauthorized
+ * Check if user has STAFF or ADMIN role
  */
-export async function requireStaffAuth() {
+export async function requireStaffAuth(): Promise<Session> {
   const session = await getSession()
 
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 401 }
-    )
+  if (!session?.user) {
+    throw new Error('Unauthorized')
   }
 
-  if (!['STAFF', 'ADMIN'].includes(session.user.role)) {
-    return NextResponse.json(
-      { success: false, error: 'Forbidden - Staff access required' },
-      { status: 403 }
-    )
+  if (session.user.role === 'USER') {
+    throw new Error('Forbidden: Staff access required')
   }
 
-  return null
-}
-
-/**
- * Middleware to require ADMIN role
- * Returns JSON error response if unauthorized
- */
-export async function requireAdminAuth() {
-  const session = await getSession()
-
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 401 }
-    )
-  }
-
-  if (session.user.role !== 'ADMIN') {
-    return NextResponse.json(
-      { success: false, error: 'Forbidden - Admin access required' },
-      { status: 403 }
-    )
-  }
-
-  return null
+  return session
 }
