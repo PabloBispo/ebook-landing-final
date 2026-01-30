@@ -4,7 +4,7 @@
  */
 
 import { PlaceholderEngine } from './placeholder-engine'
-import type { Placeholder, PromptWithPlaceholders } from './types'
+import type { PromptWithPlaceholders } from './types'
 
 // ============================================================================
 // EXEMPLO 1: Prompt para Geração de Ebook
