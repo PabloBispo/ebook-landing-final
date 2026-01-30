@@ -55,6 +55,7 @@ model User {
   email         String     @unique
   name          String
   phone         String?
+  password      String?    // Hashed password for credentials auth
   emailVerified DateTime?
   role          UserRole   @default(USER)
   createdAt     DateTime   @default(now())
