@@ -33,7 +33,7 @@ export default function PromptsPage() {
 
       const res = await fetch(`/api/prompts?${params}`)
       const data = await res.json()
-      setPrompts(data)
+      setPrompts(data.data || [])
     } catch (error) {
       console.error('Failed to fetch prompts:', error)
     } finally {

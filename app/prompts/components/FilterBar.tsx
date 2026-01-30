@@ -19,7 +19,7 @@ export function FilterBar({ selectedCategory, onCategoryChange }: FilterBarProps
   useEffect(() => {
     fetch('/api/prompts/categories')
       .then(res => res.json())
-      .then(setCategories)
+      .then(data => setCategories(data.data || []))
       .catch(console.error)
   }, [])
 
