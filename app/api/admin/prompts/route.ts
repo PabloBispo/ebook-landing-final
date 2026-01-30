@@ -9,7 +9,6 @@ import { promptCreateSchema } from '@/lib/prompts/admin-validator'
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Verify authentication and role
     const session = await getSession()
     if (!session?.user || session.user.role === 'USER') {
       return NextResponse.json(
@@ -18,11 +17,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Validate body
     const body = await request.json()
     const validated = promptCreateSchema.parse(body)
 
-    // 3. Create prompt + first version
     const prompt = await prisma.prompt.create({
       data: {
         slug: validated.slug,
@@ -37,7 +34,7 @@ export async function POST(request: NextRequest) {
         versions: {
           create: {
             version: 'v1',
-            modelTag: validated.modelTag || 'universal',
+            modelTag: validated.modelTag || 'UNIVERSAL',
             content: validated.content,
             isRecommended: true,
           }
@@ -57,7 +54,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Failed to create prompt:', error)
 
-    // Handle Zod validation errors
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
         { success: false, error: 'Validation error', details: error.message },
@@ -65,7 +61,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Handle unique constraint violations
     if (error instanceof Error && error.message.includes('Unique constraint')) {
       return NextResponse.json(
         { success: false, error: 'Prompt with this slug or alias already exists' },
