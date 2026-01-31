@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { Edit, Trash2, Copy } from 'lucide-react'
+import { Edit, Trash2, Copy, Eye, GitBranch } from 'lucide-react'
 import { useState } from 'react'
+import { StatusBadge } from './StatusBadge'
 
 interface PromptTableProps {
   prompts: any[]
@@ -48,87 +49,115 @@ export function PromptTable({ prompts, onRefresh }: PromptTableProps) {
 
   if (prompts.length === 0) {
     return (
-      <div className="text-center py-12 border rounded-lg">
-        <p className="text-muted-foreground">Nenhum prompt encontrado</p>
+      <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg">
+        <div className="text-center py-20 px-4">
+          <p className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Nenhum prompt encontrado</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Crie seu primeiro prompt para começar</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <table className="w-full">
-        <thead className="bg-muted">
-          <tr>
-            <th className="text-left p-4">Prompt</th>
-            <th className="text-left p-4">Categoria</th>
-            <th className="text-left p-4">Status</th>
-            <th className="text-left p-4">Versões</th>
-            <th className="text-left p-4">Views</th>
-            <th className="text-right p-4">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {prompts.map(prompt => (
-            <tr key={prompt.id} className="border-t hover:bg-muted/50">
-              <td className="p-4">
-                <div>
-                  <p className="font-medium">{prompt.title}</p>
-                  <p className="text-sm text-muted-foreground">{prompt.alias}</p>
+    <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+              <th className="text-left px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Prompt
+              </th>
+              <th className="text-left px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Categoria
+              </th>
+              <th className="text-left px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Status
+              </th>
+              <th className="text-left px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-1.5">
+                  <GitBranch className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  Versões
                 </div>
-              </td>
-              <td className="p-4">
-                <span className="px-2 py-1 bg-secondary rounded text-sm">
-                  {prompt.category?.icon} {prompt.category?.name}
-                </span>
-              </td>
-              <td className="p-4">
-                <StatusBadge status={prompt.status} />
-              </td>
-              <td className="p-4">{prompt._count?.versions || 0}</td>
-              <td className="p-4">{prompt.viewCount || 0}</td>
-              <td className="p-4">
-                <div className="flex gap-2 justify-end">
-                  <Link
-                    href={`/prompts/manage/${prompt.slug}/edit`}
-                    className="p-2 hover:bg-muted rounded transition-colors"
-                    title="Editar"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Link>
-                  <button
-                    onClick={() => handleDuplicate(prompt.slug)}
-                    className="p-2 hover:bg-muted rounded transition-colors"
-                    title="Duplicar"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(prompt.id)}
-                    disabled={deleting === prompt.id}
-                    className="p-2 hover:bg-muted rounded text-destructive transition-colors disabled:opacity-50"
-                    title="Deletar"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+              </th>
+              <th className="text-left px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-1.5">
+                  <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  Views
                 </div>
-              </td>
+              </th>
+              <th className="text-right px-6 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Ações
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            {prompts.map((prompt) => (
+              <tr
+                key={prompt.id}
+                className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <td className="px-6 py-4">
+                  <div className="space-y-1">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                      {prompt.title}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                      {prompt.alias}
+                    </p>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  {prompt.category && (
+                    <span className="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                      <span className="text-base">{prompt.category?.icon}</span>
+                      <span>{prompt.category?.name}</span>
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4">
+                  <StatusBadge status={prompt.status} />
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                    {prompt._count?.versions || 0}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                    {prompt.viewCount || 0}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex gap-1 justify-end">
+                    <Link
+                      href={`/prompts/manage/${prompt.slug}/edit`}
+                      className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+                      title="Editar"
+                    >
+                      <Edit className="h-4 w-4" strokeWidth={1.5} />
+                    </Link>
+                    <button
+                      onClick={() => handleDuplicate(prompt.slug)}
+                      className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+                      title="Duplicar"
+                    >
+                      <Copy className="h-4 w-4" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(prompt.id)}
+                      disabled={deleting === prompt.id}
+                      className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Deletar"
+                    >
+                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  )
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
-    PUBLISHED: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    DRAFT: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    ARCHIVED: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
-  }
-  return (
-    <span className={`px-2 py-1 rounded text-sm font-medium ${colors[status] || colors.DRAFT}`}>
-      {status}
-    </span>
   )
 }

@@ -17,15 +17,28 @@ const authConfig = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string }
-        })
+        // Query account_credentials table directly
+        const result = await prisma.$queryRaw<Array<{
+          id: string
+          email: string
+          name: string
+          password_hash: string
+          role: string
+          is_active: boolean
+        }>>`
+          SELECT id, email, name, password_hash, role, is_active
+          FROM account_credentials
+          WHERE email = ${credentials.email as string}
+          LIMIT 1
+        `
 
-        if (!user || !user.password) {
+        const user = result[0]
+
+        if (!user || !user.is_active) {
           return null
         }
 
-        const isPasswordValid = await compare(credentials.password as string, user.password)
+        const isPasswordValid = await compare(credentials.password as string, user.password_hash)
 
         if (!isPasswordValid) {
           return null
@@ -62,6 +75,7 @@ const authConfig = {
   session: {
     strategy: "jwt" as const,
   },
+  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)

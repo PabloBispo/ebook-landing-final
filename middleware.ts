@@ -1,7 +1,32 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth/auth-options'
 
-export function middleware(_request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Check if the route is protected (admin routes)
+  const isProtectedRoute = pathname.startsWith('/prompts/manage')
+
+  if (isProtectedRoute) {
+    // Get session using NextAuth v5
+    const session = await auth()
+
+    // Not authenticated - redirect to login
+    if (!session?.user) {
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('callbackUrl', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    // Authenticated but not authorized (USER role)
+    if (session.user.role === 'USER') {
+      return NextResponse.redirect(new URL('/403', request.url))
+    }
+
+    // User has STAFF or ADMIN role - allow access
+  }
+
   const response = NextResponse.next()
 
   // Security Headers

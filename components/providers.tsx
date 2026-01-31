@@ -1,6 +1,7 @@
 'use client'
 
 import { type ReactNode } from 'react'
+import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/contexts/auth-context'
 import { AppProvider } from '@/contexts/app-context'
@@ -12,20 +13,22 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <AppProvider>
-          {children}
-          <Toaster
-            position="top-right"
-            richColors
-            closeButton
-            toastOptions={{
-              duration: 4000,
-            }}
-          />
-        </AppProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppProvider>
+            {children}
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              toastOptions={{
+                duration: 4000,
+              }}
+            />
+          </AppProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </SessionProvider>
   )
 }
