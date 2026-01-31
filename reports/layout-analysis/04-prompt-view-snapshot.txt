@@ -1,0 +1,60 @@
+uid=21_0 RootWebArea "@bispo.ia | Tire isso aí do papel" url="http://localhost:3001/prompts/criar-headline-irresistivel"
+  uid=21_1 link "← Voltar para biblioteca" url="http://localhost:3001/prompts"
+    uid=21_2 StaticText "← Voltar para biblioteca"
+  uid=21_3 StaticText "✍️"
+  uid=21_4 StaticText "COPY-01"
+  uid=21_5 heading "Criar Headline Irresistível" level="1"
+  uid=21_6 StaticText "Gere 10 headlines poderosas usando frameworks comprovados (PAS, 4Us, Before-After-Bridge)."
+  uid=21_7 StaticText "#"
+  uid=21_8 StaticText "estratégia"
+  uid=21_9 StaticText "#"
+  uid=21_10 StaticText "copy"
+  uid=21_11 StaticText "Escolha o modelo de IA:"
+  uid=21_12 button "Universal ⭐"
+  uid=21_13 heading "Personalize seu prompt" level="2"
+  uid=21_14 StaticText "Produto/Oferta"
+  uid=21_15 StaticText "*"
+  uid=21_16 textbox focusable focused
+  uid=21_17 StaticText "Principal benefício"
+  uid=21_18 StaticText "*"
+  uid=21_19 textbox
+  uid=21_20 StaticText "Para quem é (avatar)"
+  uid=21_21 StaticText "*"
+  uid=21_22 textbox
+  uid=21_23 heading "Preview do Prompt" level="3"
+  uid=21_24 StaticText "⚠️"
+  uid=21_25 StaticText "Campos pendentes"
+  uid=21_26 StaticText "Crie 10 headlines irresistíveis para:
+
+**Produto:** "
+  uid=21_27 StaticText "{{produto}}"
+  uid=21_28 StaticText "
+**Benefício principal:** "
+  uid=21_29 StaticText "{{beneficio_principal}}"
+  uid=21_30 StaticText "
+**Público-alvo:** "
+  uid=21_31 StaticText "{{avatar}}"
+  uid=21_32 StaticText "
+
+Use os frameworks:
+- PAS (Problem-Agitate-Solution)
+- 4Us (Unique, Ultra-specific, Useful, Urgent)
+- Before-After-Bridge
+- Curiosity Gap
+- Resultado + Prazo
+
+Para cada headline, indique qual framework foi usado e por que ela funciona."
+  uid=21_33 StaticText "Placeholders em"
+  uid=21_34 StaticText " "
+  uid=21_35 StaticText "vermelho"
+  uid=21_36 StaticText " "
+  uid=21_37 StaticText "ainda precisam ser preenchidos"
+  uid=21_38 button "Copiar Prompt"
+  uid=21_39 StaticText "👁️ "
+  uid=21_40 StaticText "3"
+  uid=21_41 StaticText " visualizações"
+  uid=21_42 StaticText "📋 "
+  uid=21_43 StaticText "1"
+  uid=21_44 StaticText " cópias"
+  uid=21_45 region "Notifications alt+T"
+  uid=21_46 button "Open Next.js Dev Tools" expandable haspopup="menu"
