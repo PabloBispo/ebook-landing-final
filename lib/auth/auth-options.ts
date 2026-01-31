@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import { compare } from "bcryptjs"
 import type { NextAuthConfig } from "next-auth"
+import { UserRole } from "@prisma/client"
 
 const authConfig = {
   providers: [
@@ -48,7 +49,7 @@ const authConfig = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role: user.role as UserRole,
         }
       }
     })
